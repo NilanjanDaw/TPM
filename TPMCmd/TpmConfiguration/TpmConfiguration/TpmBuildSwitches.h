@@ -49,7 +49,9 @@
 // macros will make sure that it is set correctly. A simulated TPM would include a
 // Virtual TPM. The interfaces for a Virtual TPM should be modified from the standard
 // ones in the Simulator project.
-#define SIMULATION                  YES
+#ifndef SIMULATION
+#  define SIMULATION                YES
+#endif
 
 // ENABLE_TPM_DEBUG_PRINT enables arbitrary string printing.
 // enables the TPM_DEBUG_PRINT macro to route debugging strings
@@ -158,7 +160,9 @@
 #define LONGJMP_SUPPORTED           NO
 
 // This define is used to enable the new table-driven marshaling code.
-#define TABLE_DRIVEN_MARSHAL        NO
+#ifndef TABLE_DRIVEN_MARSHAL
+#  define TABLE_DRIVEN_MARSHAL      NO
+#endif
 
 // Enable the generation of RSA primes using a sieve.
 #define RSA_KEY_SIEVE               YES

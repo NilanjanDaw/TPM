@@ -524,6 +524,10 @@ TPMI_RH_NV_AUTH_Unmarshal(TPMI_RH_NV_AUTH* target, BYTE** buffer, INT32* size);
 TPM_RC
 TPMI_RH_LOCKOUT_Unmarshal(TPMI_RH_LOCKOUT* target, BYTE** buffer, INT32* size);
 
+// Table "Definition of TPMI_RH_INTEGRATED Type" (Part 2: Structures)
+TPM_RC
+TPMI_RH_INTEGRATED_Unmarshal(TPMI_RH_INTEGRATED* target, BYTE** buffer, INT32* size);
+
 // Table "Definition of TPMI_RH_NV_INDEX Type" (Part 2: Structures)
 TPM_RC
 TPMI_RH_NV_INDEX_Unmarshal(TPMI_RH_NV_INDEX* target, BYTE** buffer, INT32* size);
@@ -1022,6 +1026,11 @@ TPMS_ATTEST_Marshal(TPMS_ATTEST* source, BYTE** buffer, INT32* size);
 // Table "Definition of TPM2B_ATTEST Structure" (Part 2: Structures)
 UINT16
 TPM2B_ATTEST_Marshal(TPM2B_ATTEST* source, BYTE** buffer, INT32* size);
+
+// Table "Definition of TPM2B_INTEGRATED_ATTEST Structure" (Part 2: Structures)
+UINT16
+TPM2B_INTEGRATED_ATTEST_Marshal(
+    TPM2B_INTEGRATED_ATTEST* source, BYTE** buffer, INT32* size);
 
 // Table "Definition of TPMS_AUTH_COMMAND Structure" (Part 2: Structures)
 TPM_RC

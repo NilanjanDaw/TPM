@@ -144,6 +144,8 @@
     ((UINT16)(offsetof(MarshalData_st, TPMI_RH_NV_AUTH_DATA)))
 #define TPMI_RH_LOCKOUT_MARSHAL_REF \
     ((UINT16)(offsetof(MarshalData_st, TPMI_RH_LOCKOUT_DATA)))
+#define TPMI_RH_INTEGRATED_MARSHAL_REF \
+    ((UINT16)(offsetof(MarshalData_st, TPMI_RH_INTEGRATED_DATA)))
 #define TPMI_RH_NV_INDEX_MARSHAL_REF \
     ((UINT16)(offsetof(MarshalData_st, TPMI_RH_NV_INDEX_DATA)))
 #define TPMI_RH_NV_DEFINED_INDEX_MARSHAL_REF \
@@ -279,6 +281,8 @@
 #define TPMS_ATTEST_MARSHAL_REF ((UINT16)(offsetof(MarshalData_st, TPMS_ATTEST_DATA)))
 #define TPM2B_ATTEST_MARSHAL_REF \
     ((UINT16)(offsetof(MarshalData_st, TPM2B_ATTEST_DATA)))
+#define TPM2B_INTEGRATED_ATTEST_MARSHAL_REF \
+    ((UINT16)(offsetof(MarshalData_st, TPM2B_INTEGRATED_ATTEST_DATA)))
 #define TPMS_AUTH_COMMAND_MARSHAL_REF \
     ((UINT16)(offsetof(MarshalData_st, TPMS_AUTH_COMMAND_DATA)))
 #define TPMS_AUTH_RESPONSE_MARSHAL_REF \
@@ -506,6 +510,7 @@
 #define Type42_MARSHAL_REF ((UINT16)(offsetof(MarshalData_st, Type42_DATA)))
 #define Type43_MARSHAL_REF ((UINT16)(offsetof(MarshalData_st, Type43_DATA)))
 #define Type44_MARSHAL_REF ((UINT16)(offsetof(MarshalData_st, Type44_DATA)))
+#define Type45_MARSHAL_REF ((UINT16)(offsetof(MarshalData_st, Type45_DATA)))
 
 //#defines to change calling sequence for code using marshaling
 #define UINT8_Unmarshal(target, buffer, size) \
@@ -749,6 +754,8 @@
     Unmarshal(TPMI_RH_NV_AUTH_MARSHAL_REF, (target), (buffer), (size))
 #define TPMI_RH_LOCKOUT_Unmarshal(target, buffer, size) \
     Unmarshal(TPMI_RH_LOCKOUT_MARSHAL_REF, (target), (buffer), (size))
+#define TPMI_RH_INTEGRATED_Unmarshal(target, buffer, size) \
+    Unmarshal(TPMI_RH_INTEGRATED_MARSHAL_REF, (target), (buffer), (size))
 #define TPMI_RH_NV_INDEX_Unmarshal(target, buffer, size) \
     Unmarshal(TPMI_RH_NV_INDEX_MARSHAL_REF, (target), (buffer), (size))
 #define TPMI_RH_NV_INDEX_Marshal(source, buffer, size) \
@@ -1025,6 +1032,8 @@
     Marshal(TPMS_ATTEST_MARSHAL_REF, (source), (buffer), (size))
 #define TPM2B_ATTEST_Marshal(source, buffer, size) \
     Marshal(TPM2B_ATTEST_MARSHAL_REF, (source), (buffer), (size))
+#define TPM2B_INTEGRATED_ATTEST_Marshal(source, buffer, size) \
+    Marshal(TPM2B_INTEGRATED_ATTEST_MARSHAL_REF, (source), (buffer), (size))
 #define TPMS_AUTH_COMMAND_Unmarshal(target, buffer, size) \
     Unmarshal(TPMS_AUTH_COMMAND_MARSHAL_REF, (target), (buffer), (size))
 #define TPMS_AUTH_RESPONSE_Marshal(source, buffer, size) \

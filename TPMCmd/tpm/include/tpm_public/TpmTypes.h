@@ -656,6 +656,7 @@ typedef UINT16 TPM_ST;
 #define TPM_ST_ATTEST_TIME          (TPM_ST)(0x8019)
 #define TPM_ST_ATTEST_CREATION      (TPM_ST)(0x801A)
 #define TPM_ST_ATTEST_NV_DIGEST     (TPM_ST)(0x801C)
+#define TPM_ST_ATTEST_INTEGRATED    (TPM_ST)(0x801E)
 #define TPM_ST_CREATION             (TPM_ST)(0x8021)
 #define TPM_ST_VERIFIED             (TPM_ST)(0x8022)
 #define TPM_ST_AUTH_SECRET          (TPM_ST)(0x8023)
@@ -748,9 +749,10 @@ typedef UINT32 TPM_PT;
 #define TPM_PT_NV_BUFFER_MAX       (TPM_PT)(PT_FIXED + 44)
 #define TPM_PT_MODES               (TPM_PT)(PT_FIXED + 45)
 #define TPM_PT_MAX_CAP_BUFFER      (TPM_PT)(PT_FIXED + 46)
-#define TPM_PT_FIRMWARE_SVN        (TPM_PT)(PT_FIXED + 47)
-#define TPM_PT_FIRMWARE_MAX_SVN    (TPM_PT)(PT_FIXED + 48)
-#define PT_VAR                     (TPM_PT)(PT_GROUP * 2)
+#define TPM_PT_FIRMWARE_SVN            (TPM_PT)(PT_FIXED + 47)
+#define TPM_PT_FIRMWARE_MAX_SVN        (TPM_PT)(PT_FIXED + 48)
+#define TPM_PT_MAX_INTEGRATED_ATTEST   (TPM_PT)(PT_FIXED + 50)
+#define PT_VAR                         (TPM_PT)(PT_GROUP * 2)
 #define TPM_PT_PERMANENT           (TPM_PT)(PT_VAR + 0)
 #define TPM_PT_STARTUP_CLEAR       (TPM_PT)(PT_VAR + 1)
 #define TPM_PT_HR_NV_INDEX         (TPM_PT)(PT_VAR + 2)
@@ -852,6 +854,7 @@ typedef TPM_HANDLE TPM_RH;
 #define TPM_RH_ENDORSEMENT          (TPM_RH)(0x4000000B)
 #define TPM_RH_PLATFORM             (TPM_RH)(0x4000000C)
 #define TPM_RH_PLATFORM_NV          (TPM_RH)(0x4000000D)
+#define TPM_RH_INTEGRATED           (TPM_RH)(0x4000000E)
 #define TPM_RH_AUTH_00              (TPM_RH)(0x40000010)
 #define TPM_RH_AUTH_FF              (TPM_RH)(0x4000010F)
 #define TPM_RH_ACT_0                (TPM_RH)(0x40000110)
@@ -1279,6 +1282,7 @@ typedef TPM_HANDLE TPMI_RH_PROVISION;         // (Part 2: Structures)
 typedef TPM_HANDLE TPMI_RH_CLEAR;             // (Part 2: Structures)
 typedef TPM_HANDLE TPMI_RH_NV_AUTH;           // (Part 2: Structures)
 typedef TPM_HANDLE TPMI_RH_LOCKOUT;           // (Part 2: Structures)
+typedef TPM_HANDLE TPMI_RH_INTEGRATED;        // (Part 2: Structures)
 typedef TPM_HANDLE TPMI_RH_NV_INDEX;          // (Part 2: Structures)
 typedef TPM_HANDLE TPMI_RH_NV_DEFINED_INDEX;  // (Part 2: Structures)
 typedef TPM_HANDLE TPMI_RH_NV_LEGACY_INDEX;   // (Part 2: Structures)
@@ -1725,6 +1729,7 @@ typedef union
     TPMS_TIME_ATTEST_INFO       time;
     TPMS_NV_CERTIFY_INFO        nv;
     TPMS_NV_DIGEST_CERTIFY_INFO nvDigest;
+    TPMS_CREATION_INFO          integrated;
 } TPMU_ATTEST;
 
 typedef struct
@@ -1747,6 +1752,17 @@ typedef union
     } t;
     TPM2B b;
 } TPM2B_ATTEST;
+
+// Table "Definition of TPM2B_INTEGRATED_ATTEST Structure" (Part 2: Structures)
+typedef union
+{  // (Part 2: Structures)
+    struct
+    {
+        UINT16 size;
+        BYTE   buffer[MAX_INTEGRATED_ATTEST_SIZE];
+    } t;
+    TPM2B b;
+} TPM2B_INTEGRATED_ATTEST;
 
 typedef struct
 {  // (Part 2: Structures)

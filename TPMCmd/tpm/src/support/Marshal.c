@@ -830,6 +830,26 @@ TPMI_RH_LOCKOUT_Unmarshal(TPMI_RH_LOCKOUT* target, BYTE** buffer, INT32* size)
     return result;
 }
 
+// Table "Definition of TPMI_RH_INTEGRATED Type" (Part 2: Structures)
+TPM_RC
+TPMI_RH_INTEGRATED_Unmarshal(TPMI_RH_INTEGRATED* target, BYTE** buffer, INT32* size)
+{
+    TPM_RC result;
+    result = TPM_HANDLE_Unmarshal((TPM_HANDLE*)target, buffer, size);
+    if(result == TPM_RC_SUCCESS)
+    {
+        switch(*target)
+        {
+            case TPM_RH_INTEGRATED:
+                break;
+            default:
+                result = TPM_RC_VALUE;
+                break;
+        }
+    }
+    return result;
+}
+
 // Table "Definition of TPMI_RH_NV_INDEX Type" (Part 2: Structures)
 TPM_RC
 TPMI_RH_NV_INDEX_Unmarshal(TPMI_RH_NV_INDEX* target, BYTE** buffer, INT32* size)
@@ -2770,6 +2790,9 @@ TPMU_ATTEST_Marshal(TPMU_ATTEST* source, BYTE** buffer, INT32* size, UINT32 sele
         case TPM_ST_ATTEST_NV_DIGEST:
             return TPMS_NV_DIGEST_CERTIFY_INFO_Marshal(
                 (TPMS_NV_DIGEST_CERTIFY_INFO*)&(source->nvDigest), buffer, size);
+        case TPM_ST_ATTEST_INTEGRATED:
+            return TPMS_CREATION_INFO_Marshal(
+                (TPMS_CREATION_INFO*)&(source->integrated), buffer, size);
     }
     return 0;
 }
@@ -2817,6 +2840,25 @@ TPM2B_ATTEST_Marshal(TPM2B_ATTEST* source, BYTE** buffer, INT32* size)
         return result;
     result = (UINT16)(result
                       + BYTE_Array_Marshal((BYTE*)&(source->t.attestationData),
+                                           buffer,
+                                           size,
+                                           (INT32)source->t.size));
+    return result;
+}
+
+// Table "Definition of TPM2B_INTEGRATED_ATTEST Structure" (Part 2: Structures)
+UINT16
+TPM2B_INTEGRATED_ATTEST_Marshal(
+    TPM2B_INTEGRATED_ATTEST* source, BYTE** buffer, INT32* size)
+{
+    UINT16 result = 0;
+    result =
+        (UINT16)(result + UINT16_Marshal((UINT16*)&(source->t.size), buffer, size));
+    // if size equal to 0, the rest of the structure is a zero buffer
+    if(source->t.size == 0)
+        return result;
+    result = (UINT16)(result
+                      + BYTE_Array_Marshal((BYTE*)&(source->t.buffer),
                                            buffer,
                                            size,
                                            (INT32)source->t.size));

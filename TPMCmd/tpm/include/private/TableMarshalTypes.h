@@ -404,6 +404,15 @@ typedef const struct TPMI_RH_LOCKOUT_mst
     UINT32 values[1];
 } TPMI_RH_LOCKOUT_mst;
 
+typedef const struct TPMI_RH_INTEGRATED_mst
+{
+    UINT8  marshalType;
+    UINT8  modifiers;
+    UINT8  errorCode;
+    UINT8  entries;
+    UINT32 values[1];
+} TPMI_RH_INTEGRATED_mst;
+
 typedef const struct TPMI_RH_NV_INDEX_mst
 {
     UINT8  marshalType;
@@ -767,7 +776,7 @@ typedef const struct TPMI_ST_ATTEST_mst
     UINT8  errorCode;
     UINT8  ranges;
     UINT8  singles;
-    UINT32 values[3];
+    UINT32 values[4];
 } TPMI_ST_ATTEST_mst;
 
 typedef struct TPMU_ATTEST_mst
@@ -775,8 +784,8 @@ typedef struct TPMU_ATTEST_mst
     BYTE   countOfselectors;
     BYTE   modifiers;
     UINT16 offsetOfUnmarshalTypes;
-    UINT32 selectors[8];
-    UINT16 marshalingTypes[8];
+    UINT32 selectors[9];
+    UINT16 marshalingTypes[9];
 } TPMU_ATTEST_mst;
 
 typedef const struct TPMS_ATTEST_mst
@@ -1522,6 +1531,7 @@ typedef const struct MarshalData_st
     TPMI_RH_CLEAR_mst                  TPMI_RH_CLEAR_DATA;
     TPMI_RH_NV_AUTH_mst                TPMI_RH_NV_AUTH_DATA;
     TPMI_RH_LOCKOUT_mst                TPMI_RH_LOCKOUT_DATA;
+    TPMI_RH_INTEGRATED_mst             TPMI_RH_INTEGRATED_DATA;
     TPMI_RH_NV_INDEX_mst               TPMI_RH_NV_INDEX_DATA;
     TPMI_RH_NV_DEFINED_INDEX_mst       TPMI_RH_NV_DEFINED_INDEX_DATA;
     TPMI_RH_LEGACY_NV_INDEX_mst        TPMI_RH_LEGACY_NV_INDEX_DATA;
@@ -1595,6 +1605,7 @@ typedef const struct MarshalData_st
     TPMU_ATTEST_mst                    TPMU_ATTEST_DATA;
     TPMS_ATTEST_mst                    TPMS_ATTEST_DATA;
     Tpm2bMarshal_mst                   TPM2B_ATTEST_DATA;
+    Tpm2bMarshal_mst                   TPM2B_INTEGRATED_ATTEST_DATA;
     TPMS_AUTH_COMMAND_mst              TPMS_AUTH_COMMAND_DATA;
     TPMS_AUTH_RESPONSE_mst             TPMS_AUTH_RESPONSE_DATA;
     TPMI_AES_KEY_BITS_mst              TPMI_AES_KEY_BITS_DATA;
@@ -1719,6 +1730,7 @@ typedef const struct MarshalData_st
     Type42_mst                         Type42_DATA;
     MinMaxMarshal_mst                  Type43_DATA;
     Type44_mst                         Type44_DATA;
+    MinMaxMarshal_mst                  Type45_DATA;
 } MarshalData_st;
 
 #endif  // _TABLE_MARSHAL_TYPES_H_
