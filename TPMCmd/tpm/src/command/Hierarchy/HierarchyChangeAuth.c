@@ -45,6 +45,13 @@ TPM2_HierarchyChangeAuth(HierarchyChangeAuth_In* in  // IN: input parameter list
             gp.lockoutAuth = in->newAuth;
             NV_SYNC_PERSISTENT(lockoutAuth);
             break;
+#  if CC_CertifyIntegrated
+        case TPM_RH_INTEGRATED:
+            gc.integratedAuth = in->newAuth;
+            // orderly state should be cleared
+            g_clearOrderly = TRUE;
+            break;
+#  endif
         default:
             FAIL(FATAL_ERROR_INTERNAL);
             break;

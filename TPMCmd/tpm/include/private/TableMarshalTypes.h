@@ -318,7 +318,7 @@ typedef const struct TPMI_RH_HIERARCHY_AUTH_mst
     UINT8  modifiers;
     UINT8  errorCode;
     UINT8  entries;
-    UINT32 values[4];
+    UINT32 values[5];
 } TPMI_RH_HIERARCHY_AUTH_mst;
 
 typedef const struct TPMI_RH_HIERARCHY_POLICY_mst

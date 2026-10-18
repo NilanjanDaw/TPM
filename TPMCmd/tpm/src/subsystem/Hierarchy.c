@@ -100,11 +100,14 @@ BOOL HierarchyStartup(STARTUP_TYPE type  // IN: start up type
     // phEnable is SET on any startup
     g_phEnable = TRUE;
 
-    // Reset platformAuth, platformPolicy; enable SH and EH at TPM_RESET and
-    // TPM_RESTART
+    // Reset platformAuth, platformPolicy, integratedAuth; enable SH and EH at
+    // TPM_RESET and TPM_RESTART
     if(type != SU_RESUME)
     {
         gc.platformAuth.t.size   = 0;
+#if CC_CertifyIntegrated
+        gc.integratedAuth.t.size = 0;
+#endif
         gc.platformPolicy.t.size = 0;
         gc.platformAlg           = TPM_ALG_NULL;
 

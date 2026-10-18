@@ -166,7 +166,7 @@
 #define CC_ReadOnlyControl            CC_YES
 #define CC_PolicyTransportSPDM        CC_YES
 #ifndef CC_CertifyIntegrated
-#  define CC_CertifyIntegrated        CC_NO
+#  define CC_CertifyIntegrated        CC_YES
 #endif
 
 // clang-format on

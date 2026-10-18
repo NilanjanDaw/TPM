@@ -47,6 +47,9 @@ EntityGetLoadStatus(COMMAND* command  // IN/OUT: command parsing structure
                         // for policy checks but not always available when authValue
                         // is being checked.
                     case TPM_RH_LOCKOUT:
+#if CC_CertifyIntegrated
+                    case TPM_RH_INTEGRATED:
+#endif
                         // Rather than have #ifdefs all over the code,
                         // CASE_ACT_HANDLE is defined in ACT.h. It is 'case TPM_RH_ACT_x:'
                         // FOR_EACH_ACT(CASE_ACT_HANDLE) creates a simple
@@ -202,6 +205,12 @@ EntityGetAuthValue(TPMI_DH_ENTITY handle,  // IN: handle of entity
                     // lockoutAuth for TPM_RH_LOCKOUT
                     pAuth = &gp.lockoutAuth;
                     break;
+#if CC_CertifyIntegrated
+                case TPM_RH_INTEGRATED:
+                    // integratedAuth for TPM_RH_INTEGRATED
+                    pAuth = &gc.integratedAuth;
+                    break;
+#endif
                 case TPM_RH_NULL:
                     // nullAuth for TPM_RH_NULL. Return 0 directly here
                     return 0;
@@ -448,10 +457,12 @@ EntityGetHierarchy(TPMI_DH_ENTITY handle  // IN :handle of entity
                 case TPM_RH_NULL:
                     hierarchy = handle;
                     break;
-                // all other permanent handles are associated with the owner
-                // hierarchy. (should only be TPM_RH_OWNER and TPM_RH_LOCKOUT)
-                default:
+                case TPM_RH_OWNER:
+                case TPM_RH_LOCKOUT:
                     hierarchy = TPM_RH_OWNER;
+                    break;
+                default:
+                    hierarchy = TPM_RH_NULL;
                     break;
             }
             break;

@@ -5194,6 +5194,53 @@ ACT_SetTimeout_COMMAND_DESCRIPTOR_t _ACT_SetTimeoutData = {
 #define _ACT_SetTimeoutDataAddress 0
 #endif // CC_ACT_SetTimeout
 
+#if       CC_CertifyIntegrated
+#include    "CertifyIntegrated_fp.h"
+
+typedef TPM_RC (CertifyIntegrated_Entry)(
+    CertifyIntegrated_In*       in,
+    CertifyIntegrated_Out*      out
+);
+
+
+typedef const struct
+{
+    CertifyIntegrated_Entry     *entry;
+    UINT16                      inSize;
+    UINT16                      outSize;
+    UINT16                      offsetOfTypes;
+    UINT16                      paramOffsets[6];
+    BYTE                        types[10];
+} CertifyIntegrated_COMMAND_DESCRIPTOR_t;
+
+CertifyIntegrated_COMMAND_DESCRIPTOR_t _CertifyIntegratedData = {
+    /* entry         */         &TPM2_CertifyIntegrated,
+    /* inSize        */         (UINT16)(sizeof(CertifyIntegrated_In)),
+    /* outSize       */         (UINT16)(sizeof(CertifyIntegrated_Out)),
+    /* offsetOfTypes */         offsetof(CertifyIntegrated_COMMAND_DESCRIPTOR_t, types),
+    /* offsets       */         {(UINT16)(offsetof(CertifyIntegrated_In, objectHandle)),
+                                 (UINT16)(offsetof(CertifyIntegrated_In, qualifyingData)),
+                                 (UINT16)(offsetof(CertifyIntegrated_In, creationHash)),
+                                 (UINT16)(offsetof(CertifyIntegrated_In, creationTicket)),
+                                 (UINT16)(offsetof(CertifyIntegrated_In, signerParams)),
+                                 (UINT16)(offsetof(CertifyIntegrated_Out, attestation))},
+    /* types         */         {TPMI_RH_INTEGRATED_H_UNMARSHAL,
+                                 TPMI_DH_OBJECT_H_UNMARSHAL,
+                                 TPM2B_DATA_P_UNMARSHAL,
+                                 TPM2B_DIGEST_P_UNMARSHAL,
+                                 TPMT_TK_CREATION_P_UNMARSHAL,
+                                 TPM2B_MAX_BUFFER_P_UNMARSHAL,
+                                 END_OF_LIST,
+                                 TPM2B_ATTEST_P_MARSHAL,
+                                 TPM2B_INTEGRATED_ATTEST_P_MARSHAL,
+                                 END_OF_LIST}
+};
+
+#define _CertifyIntegratedDataAddress (&_CertifyIntegratedData)
+#else
+#define _CertifyIntegratedDataAddress 0
+#endif // CC_CertifyIntegrated
+
 #include <TpmConfiguration/VendorCommands/CommandDispatchData_CommandStructures.inl>
 
 // Lookup table to access the per-command tables above
@@ -5588,6 +5635,9 @@ COMMAND_DESCRIPTOR_t* s_CommandDataArray[] = {
 #if CC_PolicyTransportSPDM
         (COMMAND_DESCRIPTOR_t*)_PolicyTransportSPDMDataAddress,
 #endif // CC_PolicyTransportSPDM
+#if CC_CertifyIntegrated
+        (COMMAND_DESCRIPTOR_t*)_CertifyIntegratedDataAddress,
+#endif // CC_CertifyIntegrated
 
 #include <TpmConfiguration/VendorCommands/CommandDispatchData_s_CommandDataArray.inl>
 

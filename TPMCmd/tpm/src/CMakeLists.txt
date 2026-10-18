@@ -68,6 +68,7 @@ function(full_generate_tpm_sources)
         "command/Attestation/Attest_spt.c"
         "command/Attestation/Certify.c"
         "command/Attestation/CertifyCreation.c"
+        "command/Attestation/CertifyIntegrated.c"
         "command/Attestation/CertifyX509.c"
         "command/Attestation/GetCommandAuditDigest.c"
         "command/Attestation/GetSessionAuditDigest.c"

@@ -213,8 +213,20 @@ MarshalData_st MarshalData = {
     {TABLE_MTYPE,
      FOUR_BYTES,
      (UINT8)TPM_RC_VALUE,
+#  if CC_CertifyIntegrated
+     5,
+     {TPM_RH_OWNER,
+      TPM_RH_LOCKOUT,
+      TPM_RH_ENDORSEMENT,
+      TPM_RH_PLATFORM,
+      TPM_RH_INTEGRATED}},
+#  else
      4,
-     {TPM_RH_OWNER, TPM_RH_LOCKOUT, TPM_RH_ENDORSEMENT, TPM_RH_PLATFORM}},
+     {TPM_RH_OWNER,
+      TPM_RH_LOCKOUT,
+      TPM_RH_ENDORSEMENT,
+      TPM_RH_PLATFORM}},
+#  endif
     // TPMI_RH_HIERARCHY_POLICY_DATA
     {VALUES_MTYPE,
      FOUR_BYTES,

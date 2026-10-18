@@ -390,6 +390,9 @@ const TPMA_CC    s_ccAttr [] = {
 #if CC_PolicyTransportSPDM
         TPMA_CC_INITIALIZER(0x01A1, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
+#if CC_CertifyIntegrated
+        TPMA_CC_INITIALIZER(0x01B2, 0, 0, 0, 0, 2, 0, 0, 0),
+#endif
 
 // Include attributes for vendor commands
 #include "TpmConfiguration/VendorCommands/CommandAttributeData_s_ccAttr.inl"
@@ -903,6 +906,10 @@ const COMMAND_ATTRIBUTES    s_commandAttributes [] = {
 #if CC_PolicyTransportSPDM
         (COMMAND_ATTRIBUTES)(CC_PolicyTransportSPDM * // 0x01A1
             (DECRYPT_2+ALLOW_TRIAL)),
+#endif
+#if CC_CertifyIntegrated
+        (COMMAND_ATTRIBUTES)(CC_CertifyIntegrated * // 0x01B2
+            (HANDLE_1_USER+DECRYPT_2+ENCRYPT_2)),
 #endif
 
 // Include attributes for vendor commands

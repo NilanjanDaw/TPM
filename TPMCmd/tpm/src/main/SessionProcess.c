@@ -282,6 +282,10 @@ static BOOL IsAuthValueAvailable(TPM_HANDLE    handle,        // IN: handle of e
                     // policy would allow execution to continue an lockoutAuth
                     // could be used, even if direct use of lockoutAuth is disabled
                 case TPM_RH_LOCKOUT:
+#if CC_CertifyIntegrated
+                    // integratedAuth is always available.
+                case TPM_RH_INTEGRATED:
+#endif
                     // NullAuth is always available.
                 case TPM_RH_NULL:
                     result = TRUE;

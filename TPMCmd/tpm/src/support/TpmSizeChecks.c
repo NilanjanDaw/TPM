@@ -1,8 +1,23 @@
 //** Includes, Defines, and Types
+#define IO_BUFFER_C
 #include "Tpm.h"
 #include <stdio.h>
 #include <assert.h>
 #include "Marshal.h"
+
+#if CC_CertifyIntegrated
+#  include "CertifyIntegrated_fp.h"
+// Ensure CertifyIntegrated input and output structures fit in s_actionIoBuffer
+// and worst-case response fits in MAX_RESPONSE_SIZE.
+TPM_STATIC_ASSERT(((sizeof(CertifyIntegrated_In) + 7u) & ~7u)
+                      + sizeof(CertifyIntegrated_Out)
+                  < sizeof(s_actionIoBuffer));
+TPM_STATIC_ASSERT(10u + sizeof(UINT32) + sizeof(UINT16)
+                      + offsetof(TPMS_ATTEST, attested) + sizeof(TPMS_CREATION_INFO)
+                      + sizeof(UINT16) + MAX_INTEGRATED_ATTEST_SIZE
+                      + (MAX_SESSION_NUM * sizeof(TPMS_AUTH_RESPONSE))
+                  <= MAX_RESPONSE_SIZE);
+#endif  // CC_CertifyIntegrated
 
 #if RUNTIME_SIZE_CHECKS
 

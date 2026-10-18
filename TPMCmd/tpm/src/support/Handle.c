@@ -53,6 +53,9 @@ NextPermanentHandle(TPM_HANDLE inHandle  // IN: the handle to check
             case TPM_RH_ENDORSEMENT:
             case TPM_RH_PLATFORM:
             case TPM_RH_PLATFORM_NV:
+#if CC_CertifyIntegrated
+            case TPM_RH_INTEGRATED:
+#endif
 #if FW_LIMITED_SUPPORT
             case TPM_RH_FW_OWNER:
             case TPM_RH_FW_ENDORSEMENT:

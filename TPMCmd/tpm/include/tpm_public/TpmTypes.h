@@ -303,7 +303,8 @@ typedef UINT32 TPM_CC;
 #define TPM_CC_SetCapability              (TPM_CC)(0x0000019F)
 #define TPM_CC_ReadOnlyControl            (TPM_CC)(0x000001A0)
 #define TPM_CC_PolicyTransportSPDM        (TPM_CC)(0x000001A1)
-#define TPM_CC_LAST                       (TPM_CC)(0x000001A1)
+#define TPM_CC_CertifyIntegrated          (TPM_CC)(0x000001B2)
+#define TPM_CC_LAST                       (TPM_CC)(0x000001B2)
 #define CC_VEND                           (TPM_CC)(0x20000000)
 
 // This large macro is needed to determine the maximum commandIndex. This value
@@ -443,6 +444,7 @@ typedef UINT32 TPM_CC;
      + CC_SetCapability                  /* 0x0000019F */ \
      + CC_ReadOnlyControl                /* 0x000001A0 */ \
      + CC_PolicyTransportSPDM            /* 0x000001A1 */ \
+     + CC_CertifyIntegrated              /* 0x000001B2 */ \
     )
 #if LIBRARY_COMMAND_ARRAY_SIZE == 0
 #  error "No commands are enabled -- something is terribly wrong."

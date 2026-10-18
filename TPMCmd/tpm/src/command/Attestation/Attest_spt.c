@@ -21,19 +21,20 @@ void FillInAttestInfo(
 
     if(signObject == NULL)
     {
-        // The name for a null handle is TPM_RH_NULL
+        // The name for a null handle or TPM_RH_INTEGRATED is the handle itself.
         // This is defined because UINT32_TO_BYTE_ARRAY does a cast. If the
         // size of the cast is smaller than a constant, the compiler warns
         // about the truncation of a constant value.
-        TPM_HANDLE nullHandle          = TPM_RH_NULL;
+        TPM_HANDLE handle =
+            (signHandle == TPM_RH_INTEGRATED) ? TPM_RH_INTEGRATED : TPM_RH_NULL;
         attest->qualifiedSigner.t.size = sizeof(TPM_HANDLE);
-        UINT32_TO_BYTE_ARRAY(nullHandle, attest->qualifiedSigner.t.name);
+        UINT32_TO_BYTE_ARRAY(handle, attest->qualifiedSigner.t.name);
     }
     else
     {
         // Certifying object qualified name
         // if the scheme is anonymous, this is an empty buffer
-        if(CryptIsSchemeAnonymous(scheme->scheme))
+        if((scheme != NULL) && CryptIsSchemeAnonymous(scheme->scheme))
             attest->qualifiedSigner.t.size = 0;
         else
             attest->qualifiedSigner = signObject->qualifiedName;
@@ -46,10 +47,12 @@ void FillInAttestInfo(
     attest->firmwareVersion += gp.firmwareV2;
 
     // Check the hierarchy of sign object.  For NULL sign handle, the hierarchy
-    // will be TPM_RH_NULL
-    if((signObject == NULL)
-       || (!signObject->attributes.epsHierarchy
-           && !signObject->attributes.ppsHierarchy))
+    // will be TPM_RH_NULL.  For TPM_RH_INTEGRATED, resetCount, restartCount,
+    // and firmwareVersion are not obfuscated.
+    if((signHandle != TPM_RH_INTEGRATED)
+       && ((signObject == NULL)
+           || (!signObject->attributes.epsHierarchy
+               && !signObject->attributes.ppsHierarchy)))
     {
         // For signing key that is not in platform or endorsement hierarchy,
         // obfuscate the reset, restart and firmware version information
@@ -69,7 +72,7 @@ void FillInAttestInfo(
         attest->clockInfo.restartCount += (UINT32)obfuscation[1];
     }
     // External data
-    if(CryptIsSchemeAnonymous(scheme->scheme))
+    if((scheme != NULL) && CryptIsSchemeAnonymous(scheme->scheme))
         attest->extraData.t.size = 0;
     else
     {

@@ -324,6 +324,15 @@ static BOOL TPMPropertyIsDefined(TPM_PT  property,  // IN: property
         case TPM_PT_FIRMWARE_MAX_SVN:
             *value = _plat__GetTpmFirmwareMaxSvn();
             break;
+        case TPM_PT_MAX_INTEGRATED_ATTEST:
+#if CC_CertifyIntegrated
+            *value = _plat__IsIntegratedSignerAvailable()
+                         ? MAX_INTEGRATED_ATTEST_SIZE
+                         : 0;
+#else
+            *value = 0;
+#endif
+            break;
 
         // Start of variable commands
         case TPM_PT_PERMANENT:

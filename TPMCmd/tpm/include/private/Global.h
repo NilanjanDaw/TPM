@@ -916,6 +916,7 @@ typedef struct state_clear_data
     TPMI_ALG_HASH platformAlg;     // default reset is TPM_ALG_NULL
     TPM2B_DIGEST  platformPolicy;  // default reset is an Empty Buffer
     TPM2B_AUTH    platformAuth;    // default reset is an Empty Buffer
+    TPM2B_AUTH    integratedAuth;  // default reset is an Empty Buffer
 
     //*****************************************************************************
     //           PCR

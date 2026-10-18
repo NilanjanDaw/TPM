@@ -627,6 +627,9 @@ TPMI_RH_HIERARCHY_AUTH_Unmarshal(
             case TPM_RH_ENDORSEMENT:
             case TPM_RH_PLATFORM:
             case TPM_RH_LOCKOUT:
+#if CC_CertifyIntegrated
+            case TPM_RH_INTEGRATED:
+#endif
                 break;
             default:
                 result = TPM_RC_VALUE;
