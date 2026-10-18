@@ -380,6 +380,48 @@ LIB_EXPORT uint16_t _plat__GetTpmFirmwareSvn(void);
 // return the maximum value that the TPM Firmware SVN may take.
 LIB_EXPORT uint16_t _plat__GetTpmFirmwareMaxSvn(void);
 
+#ifndef _PLAT_INTEGRATED_ATTEST_TYPES_DEFINED_
+#  define _PLAT_INTEGRATED_ATTEST_TYPES_DEFINED_
+
+typedef enum _plat__IntegratedAttestStatus
+{
+    PLAT_INTEGRATED_ATTEST_SUCCESS        = 0,
+    PLAT_INTEGRATED_ATTEST_INVALID_PARAMS = 1,
+    PLAT_INTEGRATED_ATTEST_UNAVAILABLE    = 2,
+    PLAT_INTEGRATED_ATTEST_RETRY          = 3,
+    PLAT_INTEGRATED_ATTEST_INVALID_SIZE   = 4,
+    PLAT_INTEGRATED_ATTEST_FORCE_UINT32   = 0x7FFFFFFF
+} _plat__IntegratedAttestStatus;
+
+typedef uint32_t (*_plat__IntegratedSignerFn)(
+    uint16_t       hashAlg,
+    const uint8_t* digest,
+    uint16_t       digestSize,
+    const uint8_t* signerParams,
+    uint16_t       signerParamsSize,
+    uint16_t       maxAttestSize,
+    uint8_t*       attestBuf,
+    uint16_t*      attestSize);
+
+#endif  // _PLAT_INTEGRATED_ATTEST_TYPES_DEFINED_
+
+//***_plat__IsIntegratedSignerAvailable()
+// Return non-zero if an Integrated Signer is currently available.
+LIB_EXPORT int _plat__IsIntegratedSignerAvailable(void);
+
+//***_plat__GetIntegratedAttestation()
+// Obtain an Integrated Signer attestation report over signerInputDigest.
+LIB_EXPORT uint32_t _plat__GetIntegratedAttestation(
+    uint16_t       hashAlg,           // IN: objectHandle->nameAlg
+    const uint8_t* digest,            // IN: signerInputDigest buffer
+    uint16_t       digestSize,        // IN: size of signerInputDigest in bytes
+    const uint8_t* signerParams,      // IN: vendor-specific signer parameters
+    uint16_t       signerParamsSize,  // IN: size of signerParams in bytes
+    uint16_t       maxAttestSize,     // IN: capacity of attestBuf in bytes
+    uint8_t*       attestBuf,         // OUT: Integrated Signer attestation report
+    uint16_t*      attestSize         // OUT: size of populated attestation report
+);
+
 #if SVN_LIMITED_SUPPORT
 //***_plat__GetTpmFirmwareSvnSecret()
 // Function: Obtain a Firmware SVN Secret bound to the given SVN. Fails if the

@@ -128,6 +128,77 @@ LIB_EXPORT void _plat__SetTpmFirmwareHash(uint32_t hash);
 LIB_EXPORT void _plat__SetTpmFirmwareSvn(uint16_t svn);
 #endif
 
+//** From VendorInfo.c - Integrated Signer Platform Interface
+
+#ifndef _PLAT_INTEGRATED_ATTEST_TYPES_DEFINED_
+#  define _PLAT_INTEGRATED_ATTEST_TYPES_DEFINED_
+
+typedef enum _plat__IntegratedAttestStatus
+{
+    PLAT_INTEGRATED_ATTEST_SUCCESS        = 0,
+    PLAT_INTEGRATED_ATTEST_INVALID_PARAMS = 1,
+    PLAT_INTEGRATED_ATTEST_UNAVAILABLE    = 2,
+    PLAT_INTEGRATED_ATTEST_RETRY          = 3,
+    PLAT_INTEGRATED_ATTEST_INVALID_SIZE   = 4,
+    PLAT_INTEGRATED_ATTEST_FORCE_UINT32   = 0x7FFFFFFF
+} _plat__IntegratedAttestStatus;
+
+typedef uint32_t (*_plat__IntegratedSignerFn)(
+    uint16_t       hashAlg,
+    const uint8_t* digest,
+    uint16_t       digestSize,
+    const uint8_t* signerParams,
+    uint16_t       signerParamsSize,
+    uint16_t       maxAttestSize,
+    uint8_t*       attestBuf,
+    uint16_t*      attestSize);
+
+#endif  // _PLAT_INTEGRATED_ATTEST_TYPES_DEFINED_
+
+// Return non-zero if an Integrated Signer is currently available
+LIB_EXPORT int _plat__IsIntegratedSignerAvailable(void);
+
+// Register a custom Integrated Signer callback (or NULL to clear)
+LIB_EXPORT void _plat__RegisterIntegratedSigner(_plat__IntegratedSignerFn callback);
+
+// Retrieve the currently registered Integrated Signer callback
+LIB_EXPORT _plat__IntegratedSignerFn _plat__GetIntegratedSigner(void);
+
+// Enable or disable Integrated Signer availability
+LIB_EXPORT void _plat__SetIntegratedSignerAvailable(int available);
+
+#if SIMULATION
+// Default reference simulator Integrated Signer parameters and report layout
+#  define PLAT_SIM_ATTEST_MAGIC 0x53494D41u  // "SIMA"
+#  define PLAT_SIM_PARAMS_VER   1u
+#  define PLAT_SIM_VALID_FLAGS  0x0003u
+
+typedef struct PLAT_SIM_SIGNER_PARAMS
+{
+    uint8_t  version;
+    uint8_t  reserved;
+    uint16_t flags;
+} PLAT_SIM_SIGNER_PARAMS;
+
+typedef struct PLAT_SIM_ATTEST_REPORT
+{
+    uint32_t magic;
+    uint16_t version;
+    uint16_t flags;
+    uint16_t hashAlg;
+    uint16_t digestSize;
+    uint32_t firmwareV1;
+    uint32_t firmwareV2;
+    uint16_t firmwareSvn;
+    uint16_t reserved;
+    uint8_t  signerInputDigest[64];
+    uint8_t  signature[32];
+} PLAT_SIM_ATTEST_REPORT;
+
+// Select the default simulator Integrated Signer
+LIB_EXPORT void _plat__UseDefaultIntegratedSigner(void);
+#endif  // SIMULATION
+
 //** From RunCommand.c
 
 //***_plat__RunCommand()
