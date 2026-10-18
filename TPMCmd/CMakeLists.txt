@@ -239,6 +239,7 @@ add_subdirectory(tpm)
 #               consumed in another build system manually.
 #
 if (NOT Tpm_BuildOption_LibOnly)
+    enable_testing()
     add_subdirectory(Platform)
     add_subdirectory(Simulator)
 endif()

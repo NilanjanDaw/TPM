@@ -128,3 +128,35 @@ install(TARGETS ${PROJECT_NAME}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+add_executable(CertifyIntegratedTest
+    src/CertifyIntegratedTest.c
+)
+target_include_directories(CertifyIntegratedTest PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/prototypes
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../tpm/include>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../tpm/include/private>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../tpm/include/private/prototypes>"
+)
+target_compile_definitions(CertifyIntegratedTest PRIVATE
+    _UNICODE
+    _CONSOLE
+    _DIAGNOSTICS
+)
+target_link_libraries(CertifyIntegratedTest PUBLIC
+    TpmConfiguration::TpmConfiguration
+    Tpm_Public_Headers::Tpm_Public_Headers
+    Tpm_PlatformLib::Tpm_PlatformLib
+    Tpm_Platform_Interface::Tpm_Platform_Interface
+    Tpm_CoreLib::Tpm_CoreLib
+    Tpm_CryptoLib_TpmBigNum::Tpm_CryptoLib_TpmBigNum
+    TpmVendorCommands_Handlers::TpmVendorCommands_Handlers
+)
+if(WIN32)
+    target_link_libraries(CertifyIntegratedTest PRIVATE Ws2_32.lib Rpcrt4.lib)
+    target_link_directories(CertifyIntegratedTest PRIVATE ${WIN_LIBCRYPTO_PATH})
+else()
+    target_link_libraries(CertifyIntegratedTest PUBLIC ${link_targets})
+endif()
+add_test(NAME CertifyIntegratedTest COMMAND CertifyIntegratedTest)
